@@ -309,46 +309,32 @@ chip_python_wheel_action("chip-core") {
   output_name = "${py_package_output}-${chip_python_version}-${tags}.whl"
 }
 
-chip_python_wheel_action("chip-clusters") {
-  py_manifest_files = [
-    {
-      src_dir = "."
-      sources = [
-        "chip/ChipUtility.py",
-        "chip/clusters/CHIPClusters.py",
-        "chip/clusters/ClusterObjects.py",
-        "chip/clusters/Objects.py",
-        "chip/clusters/TestObjects.py",
-        "chip/clusters/Types.py",
-        "chip/clusters/enum.py",
-        "chip/tlv/__init__.py",
-        "chip/tlv/tlvlist.py",
-      ]
-    },
-    {
-      src_dir = "//"
-      sources = [ "//LICENSE" ]
-    },
+pw_python_package("chip-clusters") {
+  generate_setup = {
+    metadata = {
+      name = "chip-clusters"
+      version = "1.0.0"
+      author = "Project CHIP Authors"
+      license_expression = "Apache-2.0"
+      description = "Various helpers associated with the scripts"
+      url = "https://github.com/project-chip/connectedhomeip"
+    }
+  }
+
+  sources = [
+    "chip/ChipUtility.py",
+    "chip/clusters/CHIPClusters.py",
+    "chip/clusters/ClusterObjects.py",
+    "chip/clusters/Objects.py",
+    "chip/clusters/TestObjects.py",
+    "chip/clusters/Types.py",
+    "chip/clusters/enum.py",
+    "chip/tlv/__init__.py",
+    "chip/tlv/tlvlist.py",
   ]
 
-  inputs = []
-
-  py_packages = [
-    "chip",
-    "chip.clusters",
-    "chip.tlv",
-  ]
-
-  py_package_reqs = [
-    "dacite",
-    "aenum",
-  ]
-
-  py_package_name = "${chip_python_package_prefix}-clusters"
-  py_package_output = string_replace(py_package_name, "-", "_")
-  py_platform_tag = "any"
-
-  output_name = "${py_package_output}-${chip_python_version}-py3-none-any.whl"
+  # Remove the 'licenses' field from here, as it's not expected by this template
+  inputs = [ "//LICENSE" ]  # Reference the LICENSE file as an input, if needed.
 }
 
 chip_python_wheel_action("chip-repl") {
